@@ -12,11 +12,16 @@
   <div class="wrapper">
     <div class="container">
       <h1>AdNord Arbeitsprobe</h1>
-      <button onclick="setGalleryImages()">FETCH</button>
+      <h2>fetch & display images</h2>
     </div>
     <div class="container">
-      <div id="carousel"></div>
-      <div id="gallery" class="grid grid-4"></div>
+      <div id="carousel">
+        <div class="carousel-controls">
+          <button onclick="carouselPrev()" class="carousel-prev">❮</button>
+          <button onclick="carouselNext()" class="carousel-next">❯</button>
+        </div>
+      </div>
+      <div id="gallery" class="grid grid-5"></div>
     </div>
   </div>
 </body>
