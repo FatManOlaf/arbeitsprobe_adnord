@@ -9,49 +9,25 @@ const carousel = document.getElementById('carousel');
 const gallery = document.getElementById('gallery');
 const modal = document.getElementById('modal');
 
+// fetch data from picsum.photos and return them as a JSON
 const fetchImages = async () => {
   try{
-    // fetch data from url and specified page
     const response = await fetch(url + currentPage);
 
-    // throw error if response != ok
     if(!response.ok){
       throw new Error('Response status: ' + response.status);
     }
 
-    // parse json from fetched data
     const json = await response.json();
 
     return json;
   }
-  // catch & log error
   catch (error) {
     console.error(error.message);
   }
 }
 
-const setGalleryImages = async () => {
-  upcomingImages = await fetchImages(currentPage + 1);
-
-  // loop through images JSON
-  for(const image of upcomingImages) {
-  
-    // create div and img elements, add neccessary tags
-    const div = document.createElement('div');
-    const img = document.createElement('img');
-
-    div.className = 'item-gallery';
-
-    img.src = image.download_url;
-    img.alt = image.author;
-
-    // append img to div, append div+img to gallery
-    div.appendChild(img);
-    gallery.appendChild(div);
-
-  };
-}
-
+// fetch images from picsum.photos and put them into the carousel
 const setCarouselImages = async () => {
   currentImages = await fetchImages(currentPage);
 
@@ -77,7 +53,7 @@ const setCarouselImages = async () => {
       openLightbox(this.src, this.alt);
     })
 
-    // append img to div, append div+img to gallery
+    // append img to div, append div+img to carousel
     div.appendChild(img);
     carousel.appendChild(div);
 
@@ -86,6 +62,30 @@ const setCarouselImages = async () => {
   };
 }
 
+// fetch images from next picsum.photos page and put them into the gallery
+const setGalleryImages = async () => {
+  upcomingImages = await fetchImages(currentPage + 1);
+
+  // loop through images JSON
+  for(const image of upcomingImages) {
+  
+    // create div and img elements, add neccessary tags
+    const div = document.createElement('div');
+    const img = document.createElement('img');
+
+    div.className = 'item-gallery';
+
+    img.src = image.download_url;
+    img.alt = image.author;
+
+    // append img to div, append div+img to gallery
+    div.appendChild(img);
+    gallery.appendChild(div);
+
+  };
+}
+
+// show next image in carousel
 const carouselNext = () => {
   // if theres a next image, move current image to the left, next image to center
   if(currentCarouselIndex < lastCarouselIndex){
@@ -98,8 +98,9 @@ const carouselNext = () => {
   }
 }
 
+// show previous image in carousel
 const carouselPrev = () => {
-  // if theres a next image, move current image to the left, next image to center
+  // if theres a next image, move current image to the right, previous image to center
   if(currentCarouselIndex > firstCarouselIndex){
     carousel.querySelector('[data-id="' + currentCarouselIndex + '"]').style.left = 'calc(100% + 16px)';
     currentCarouselIndex --;
@@ -112,7 +113,6 @@ const carouselPrev = () => {
 
 // fetch images from page parameter
 const changePage = (page) => {
-  // set current page to page from parameter
   currentPage = page;
 
   // remove current images from carousel & gallery
