@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Arbeitsprobe AdNord | Bilder importieren & darstellen</title>
   <meta name="description" content="Arbeitsprobe von Felix Mangold für AdNord Media. Daten von picsum.photo API importieren und auf eigener Seite darstellen.">
-  <script src="./scripts/script.js" async></script>
+  <script src="./scripts/script.js" async defer></script>
   <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
-  
+  <div class="wrapper">
+    <div class="container">
+      <h1>AdNord Arbeitsprobe</h1>
+      <button onclick="fetchImages()">FETCH</button>
+    </div>
+  </div>
 </body>
 </html>
