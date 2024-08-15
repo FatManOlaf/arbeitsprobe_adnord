@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+:root{
+  --fontFamily: 'Open Sans', sans-serif;
+  --colorSlate800: rgb(30 41 59);
+  --colorSlate400: rgb(148 163 184);
+  --colorBlue900: rgb(30 58 138);
+  --colorWhite: #fff;
+}
+
+html, body,
+h1, p, button{
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+body{
+  font: 300 18px/1.5 var(--fontFamily);
+  color: var(--colorSlate800);
+}
+
+h1{
+  font: 900 3rem/1 var(--fontFamily);
+  color: var(--colorBlue900);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+h1:after{
+  content: "";
+  display: block;
+  width: 30%;
+  margin: 32px 0 0 35%;
+  border-bottom: solid 1px var(--colorSlate400);
+}
+
+.container{
+  max-width:1280px;
+  margin:0 auto;
+  padding:64px;
+}
