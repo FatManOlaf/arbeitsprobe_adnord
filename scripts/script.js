@@ -113,7 +113,13 @@ const carouselPrev = () => {
 
 // fetch images from page parameter
 const changePage = (page) => {
-  currentPage = page;
+  
+  if(page <= 1){
+    currentPage = 1;
+  }
+  else{
+    currentPage = page;
+  }
 
   // remove current images from carousel & gallery
   for(const item of carousel.querySelectorAll(':scope > .item-carousel')){
