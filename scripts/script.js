@@ -3,11 +3,16 @@ let currentPage = 1;
 let currentImages;
 let upcomingImages;
 let currentCarouselIndex = 0;
+let firstCarouselIndex;
+let lastCarouselIndex;
+const carousel = document.getElementById('carousel');
+const gallery = document.getElementById('gallery');
+const modal = document.getElementById('modal');
 
-const fetchImages = async (page = currentPage) => {
+const fetchImages = async () => {
   try{
     // fetch data from url and specified page
-    const response = await fetch(url + page);
+    const response = await fetch(url + currentPage);
 
     // throw error if response != ok
     if(!response.ok){
@@ -25,11 +30,10 @@ const fetchImages = async (page = currentPage) => {
   }
 }
 
-const setGalleryImages = async (page = currentPage + 1) => {
-  upcomingImages = await fetchImages(page);
-  const gallery = document.getElementById('gallery');
+const setGalleryImages = async () => {
+  upcomingImages = await fetchImages(currentPage + 1);
 
-  // loop through images-JSON
+  // loop through images JSON
   for(const image of upcomingImages) {
   
     // create div and img elements, add neccessary tags
@@ -48,11 +52,14 @@ const setGalleryImages = async (page = currentPage + 1) => {
   };
 }
 
-const setCarouselImages = async (page = currentPage) => {
-  currentImages = await fetchImages(page);
-  const carousel = document.getElementById('carousel');
+const setCarouselImages = async () => {
+  currentImages = await fetchImages(currentPage);
 
-  // loop through images-JSON
+  currentCarouselIndex = currentImages[0].id;
+  firstCarouselIndex = currentImages[0].id;
+  lastCarouselIndex = currentImages[currentImages.length - 1].id;
+
+  // loop through images JSON
   for(const image of currentImages) {
   
     // create div and img elements, add neccessary tags
@@ -65,29 +72,75 @@ const setCarouselImages = async (page = currentPage) => {
     img.src = image.download_url;
     img.alt = image.author;
 
+    // add lightbox event listener
+    img.addEventListener('click', function() {
+      openLightbox(this.src, this.alt);
+    })
+
     // append img to div, append div+img to gallery
     div.appendChild(img);
     carousel.appendChild(div);
-  };
 
-  // add active-marker to first image
-  carousel.querySelector('[data-id="0"]').classList.add('active');
+    // put first image onto canvas
+    carousel.querySelector('[data-id="' + currentCarouselIndex + '"]').style.left = '0';
+  };
 }
 
 const carouselNext = () => {
-  const carousel = document.getElementById('carousel');
-
   // if theres a next image, move current image to the left, next image to center
-  if(currentCarouselIndex < carousel.querySelectorAll(':scope > .item-carousel').length - 2){
+  if(currentCarouselIndex < lastCarouselIndex){
     carousel.querySelector('[data-id="' + currentCarouselIndex + '"]').style.left = 'calc(-100% - 16px)';
     currentCarouselIndex ++;
     carousel.querySelector('[data-id="' + currentCarouselIndex + '"]').style.left = '0';
   }
-  // else: get next set of images
   else{
-    // do something
+    changePage(currentPage + 1);
+  }
+}
+
+const carouselPrev = () => {
+  // if theres a next image, move current image to the left, next image to center
+  if(currentCarouselIndex > firstCarouselIndex){
+    carousel.querySelector('[data-id="' + currentCarouselIndex + '"]').style.left = 'calc(100% + 16px)';
+    currentCarouselIndex --;
+    carousel.querySelector('[data-id="' + currentCarouselIndex + '"]').style.left = '0';
+  }
+  else if(currentPage > 1){
+    changePage(currentPage - 1);
+  }
+}
+
+const changePage = (page) => {
+  currentPage = page;
+
+  for(const item of carousel.querySelectorAll(':scope > .item-carousel')){
+    item.remove();
   }
 
+  for(const item of gallery.querySelectorAll(':scope > .item-gallery')){
+    item.remove();
+  }
+
+  setCarouselImages();
+  setGalleryImages();
+}
+
+const nextPage = () => {
+  changePage(currentPage + 1);
+}
+
+const prevPage = () => {
+  changePage(currentPage - 1);
+}
+
+const openLightbox = (src, alt) => {
+  modal.classList.add('open');
+  modal.querySelector(':scope img').src = src;
+  modal.querySelector(':scope img').alt = alt;
+}
+
+const closeLightbox = () => {
+  modal.classList.remove('open');
 }
 
 setGalleryImages();

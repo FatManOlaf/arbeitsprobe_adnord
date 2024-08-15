@@ -11,8 +11,8 @@
 <body>
   <div class="wrapper">
     <div class="container">
-      <h1>AdNord Arbeitsprobe</h1>
-      <h2>fetch & display images</h2>
+      <h1>Work Sample Felix Mangold</h1>
+      <h2>Fetch & Display Images</h2>
     </div>
     <div class="container">
       <div id="carousel">
@@ -21,7 +21,22 @@
           <button onclick="carouselNext()" class="carousel-next">❯</button>
         </div>
       </div>
-      <div id="gallery" class="grid grid-5"></div>
+      <div class="card">
+        <h3>Upcoming Images</h3>
+        <div id="gallery" class="grid grid-5"></div>
+      </div>
+      <div class="pagination">
+        <button onclick="prevPage()">Prev Page</button>
+        <button onclick="nextPage()">Next Page</button>
+      </div>
+    </div>
+    <div id="modal">
+      <button class="modal-close" onclick="closeLightbox()">
+        <div>✖</div>
+      </button>
+      <div class="lightbox">
+        <img>
+      </div>
     </div>
   </div>
 </body>
