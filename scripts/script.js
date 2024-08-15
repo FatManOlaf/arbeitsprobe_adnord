@@ -110,9 +110,12 @@ const carouselPrev = () => {
   }
 }
 
+// fetch images from page parameter
 const changePage = (page) => {
+  // set current page to page from parameter
   currentPage = page;
 
+  // remove current images from carousel & gallery
   for(const item of carousel.querySelectorAll(':scope > .item-carousel')){
     item.remove();
   }
@@ -121,27 +124,33 @@ const changePage = (page) => {
     item.remove();
   }
 
+  // set new carousel & gallerys
   setCarouselImages();
   setGalleryImages();
 }
 
+// call changePage function with param currentPage+1
 const nextPage = () => {
   changePage(currentPage + 1);
 }
 
+// call changePage function with param currentPage-1
 const prevPage = () => {
   changePage(currentPage - 1);
 }
 
+// open modal box and set img src and alt text of clicked 
 const openLightbox = (src, alt) => {
   modal.classList.add('open');
   modal.querySelector(':scope img').src = src;
   modal.querySelector(':scope img').alt = alt;
 }
 
+// close modal box
 const closeLightbox = () => {
   modal.classList.remove('open');
 }
 
+// set carousel & gallery images on page load
 setGalleryImages();
 setCarouselImages();
