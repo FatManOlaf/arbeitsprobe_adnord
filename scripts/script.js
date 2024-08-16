@@ -10,9 +10,9 @@ const gallery = document.getElementById('gallery');
 const modal = document.getElementById('modal');
 
 // fetch data from picsum.photos and return them as a JSON
-const fetchImages = async () => {
+const fetchImages = async (page = currentpage) => {
   try{
-    const response = await fetch(url + currentPage);
+    const response = await fetch(url + page);
 
     if(!response.ok){
       throw new Error('Response status: ' + response.status);
@@ -25,6 +25,18 @@ const fetchImages = async () => {
   catch (error) {
     console.error(error.message);
   }
+}
+
+// to resize images before loeading to reduce file size
+const resizeImage = (image, width, height) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(image, 0, 0, width, height);
+
+  return canvas.toDataURL('image/jpeg', 1.0);
 }
 
 // fetch images from picsum.photos and put them into the carousel
@@ -41,21 +53,29 @@ const setCarouselImages = async () => {
     // create div and img elements, add neccessary tags
     const div = document.createElement('div');
     const img = document.createElement('img');
+    const resizedImg = document.createElement('img');
 
     div.className = 'item-carousel';
     div.dataset.id = image.id;
 
     img.src = image.download_url;
-    img.alt = image.author;
+    img.crossOrigin = "Anonymous";
+    
+    resizedImg.dataset.originalUrl = image.download_url;
+    resizedImg.alt = image.author;
+
+    img.onload = () => {
+      resizedImg.src = resizeImage(img, 1280, 1280 * image.height / image.width);
+    }
+    
+    // append img to div, append div+img to gallery
+    div.appendChild(resizedImg);
+    carousel.appendChild(div);
 
     // add lightbox event listener
-    img.addEventListener('click', function() {
-      openLightbox(this.src, this.alt);
+    resizedImg.addEventListener('click', function() {
+      openLightbox(this.dataset.originalUrl, this.alt);
     })
-
-    // append img to div, append div+img to carousel
-    div.appendChild(img);
-    carousel.appendChild(div);
 
     // put first image onto canvas
     carousel.querySelector('[data-id="' + currentCarouselIndex + '"]').style.left = '0';
@@ -72,16 +92,23 @@ const setGalleryImages = async () => {
     // create div and img elements, add neccessary tags
     const div = document.createElement('div');
     const img = document.createElement('img');
+    const resizedImg = document.createElement('img');
 
     div.className = 'item-gallery';
 
     img.src = image.download_url;
     img.alt = image.author;
+    img.crossOrigin = "Anonymous";
+
+    resizedImg.dataset.originalUrl = image.download_url;
+
+    img.onload = () => {
+      resizedImg.src = resizeImage(img, 500, 500 * image.height / image.width);
+    }
 
     // append img to div, append div+img to gallery
-    div.appendChild(img);
+    div.appendChild(resizedImg);
     gallery.appendChild(div);
-
   };
 }
 
@@ -155,6 +182,8 @@ const openLightbox = (src, alt) => {
 // close modal box
 const closeLightbox = () => {
   modal.classList.remove('open');
+  modal.querySelector(':scope img').src = "";
+  modal.querySelector(':scope img').alt = "";
 }
 
 // set carousel & gallery images on page load
