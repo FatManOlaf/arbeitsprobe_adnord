@@ -54,6 +54,10 @@ img{
   display:block;
 }
 
+
+
+/* ********** CONTAINER, GRID, CARD ********** */
+
 .container{
   max-width:1280px;
   margin:0 auto;
@@ -79,6 +83,10 @@ img{
   border-top:solid 1px var(--colorSlate400);
   background: var(--colorSlate200);
 }
+
+
+
+/* ********** CAROUSEL ********** */
 
 #carousel{
   position: relative;
@@ -161,6 +169,10 @@ img{
   background:linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.4));
 }
 
+
+
+/* ********** GALLERY ********** */
+
 .item-gallery img{
   aspect-ratio:1.5;
   object-fit: cover;
@@ -209,6 +221,10 @@ img{
 .pagination button:hover{
   border-color: var(--colorBlue900);
 }
+
+
+
+/* ********** MODAL, LIGHTBOX ********** */
 
 #modal{
   position:fixed;
@@ -282,6 +298,9 @@ img{
   max-width:100%;
 }
 
+
+
+/* ********** RESPONSIVENESS ********** */
 
 @media(max-width:1280px){
   .lightbox{
